@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <title>Image Tagging</title>
+  <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='tagSelector.css') }}">
+</head>
+
+<body>
+
+  <div class="imageContainer">
+
+    <label for="currentImage" id="filename"></label>
+    <img id="currentImage" src="">
+    <div id="tagContainer">
+    </div>
+
+  </div>
+  <div>
+    <button id="butPrev" onclick="loadPrevImage()">Previous</button>
+    <button id="butNext" onclick="loadNextImage()">Next</button>
+  </div>
+
+  <div>
+    <input name='tags' class='some_class_name' placeholder='write some tags' value='css, html, javascript'>
+    <button id="setTags" onclick="setTags()">setTags</button>
+  </div>
+
+
+
+
+
+  <script src="{{ url_for('static', filename='initialize.js') }}"></script>
+  <script src="{{ url_for('static', filename='tagSelector.js') }}"></script>
+</body>
+
+</html>
