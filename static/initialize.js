@@ -67,7 +67,7 @@ function loadTags() {
             tagContainer.removeChild(tagContainer.firstChild)
         }
 
-        document.querySelector('input[name="tags"]').value = tags.join(", ");
+        document.querySelector('input[name="tags"]').value = tags;
     })
 }
 
@@ -77,7 +77,7 @@ function loadPossibleTags() {
         return response.json();
     }).then(data => {
         console.log(data)
-        tagify.whitelist = data["tags"]
+        tagify.whitelist = data["tags"].split(",")
     })
 }
 
