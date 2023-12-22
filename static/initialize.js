@@ -29,7 +29,12 @@ function addTag() {
 }
 
 function setTags() {
-    let value = JSON.parse(document.querySelector('input[name="tags"]').value);
+    let value = document.querySelector('input[name="tags"]').value;
+    if (value != "") {
+        value = JSON.parse(value);
+    }
+
+
     let tags = [];
     let filename = document.getElementById("filename").textContent
     for (i in value) {

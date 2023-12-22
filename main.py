@@ -33,7 +33,7 @@ def get_image(image_id: int):
 @app.route("/set_tags/", methods=["POST"])
 def set_tags():
     if request.method == "POST":
-        if request.json and request.json["filename"] and request.json["tags"]:
+        if request.json and request.json["filename"] and "tags" in request.json:
             filename = request.json["filename"]
             tags = request.json["tags"]
 
@@ -115,3 +115,13 @@ def read_tags_from_xmp():
                 images_tags.append((file, tags)) # type: ignore
     db_controller.tag_images(images_tags)
     return ""
+
+
+@app.route("/get_most_popular_tags/")
+def get_most_popular_tags():
+    
+    popularity = db_controller.get_most_popular_tags()
+    print("Most popular tags are:")
+    print(popularity)
+    
+    return popularity

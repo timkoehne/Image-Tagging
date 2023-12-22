@@ -155,7 +155,7 @@ class DB_Controller:
         for entry in image_tags:
             filename = entry[0]
             tags = entry[1]
-            
+
             for tag in tags:
                 self.tag_image(filename, tag, connection)
 
@@ -164,9 +164,22 @@ class DB_Controller:
     def remove_tags_from_image(self, image: str):
         connection = sqlite3.connect(self.db_filename)
         cursor = connection.cursor()
-        
+
         image_id = self._get_image_id(image, connection)
-        cursor.execute("DELETE FROM image_tags WHERE image_id=?", (image_id, ))
-        
+        cursor.execute("DELETE FROM image_tags WHERE image_id=?", (image_id,))
+
         connection.commit()
         connection.close()
+
+    def get_most_popular_tags(self):
+        connection = sqlite3.connect(self.db_filename)
+        cursor = connection.cursor()
+
+        cursor.execute(
+            "SELECT tag, COUNT(tag) AS amount FROM image_tags JOIN tags ON image_tags.tag_id=tags.tag_id GROUP BY tag ORDER BY amount DESC LIMIT 10"
+        )
+        popularity = cursor.fetchall()
+        popularity = [{"tag": entry[0], "amount": entry[1]} for entry in popularity]
+
+        connection.close()
+        return popularity
