@@ -70,6 +70,7 @@ function loadTags() {
         document.querySelector('input[name="tags"]').value = tags;
         tagify.loading(false) // render the suggestions dropdown
     })
+    loadPossibleTags()
 }
 
 
