@@ -56,6 +56,7 @@ function setTags() {
 function loadTags() {
 
     filename = document.getElementById("filename").textContent;
+    tagify.loading(true).dropdown.hide()
 
     fetch("/get_tags/" + filename).then(response => {
         return response.json();
@@ -66,8 +67,8 @@ function loadTags() {
         while (tagContainer.firstChild) {
             tagContainer.removeChild(tagContainer.firstChild)
         }
-
         document.querySelector('input[name="tags"]').value = tags;
+        tagify.loading(false) // render the suggestions dropdown
     })
 }
 
