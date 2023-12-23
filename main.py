@@ -59,7 +59,7 @@ def set_tags():
 def get_tags(filename: str):
     tags = db_controller.get_image_tags(filename)
     tags = ",".join(tags)
-    
+
     if len(tags) == 0:
         print("looking into exif because there is no data in database")
         with exiftool.ExifToolHelper() as et:
@@ -69,7 +69,7 @@ def get_tags(filename: str):
 
             if "XMP:Subject" in metadata:
                 tags = metadata.get("XMP:Subject").split(",")  # type: ignore
-    
+
     data = {"tags": tags}
 
     return json.dumps(data)
@@ -112,16 +112,35 @@ def read_tags_from_xmp():
 
             if "XMP:Subject" in metadata:
                 tags: list[str] = metadata.get("XMP:Subject").split(",")  # type: ignore
-                images_tags.append((file, tags)) # type: ignore
+                images_tags.append((file, tags))  # type: ignore
     db_controller.tag_images(images_tags)
     return ""
 
 
 @app.route("/get_most_popular_tags/")
 def get_most_popular_tags():
-    
     popularity = db_controller.get_most_popular_tags()
     print("Most popular tags are:")
     print(popularity)
-    
+
     return popularity
+
+
+@app.route("/get_tag_categories/")
+def get_tag_categories():
+    with open("saved_tags.json", "r") as file:
+        content: dict[str, list[str]] = json.loads(file.read())
+    keys = list(content.keys())
+    print(list(content.keys()))
+    return keys
+
+
+@app.route("/get_tag_category/<string:category>")
+def get_tag_category(category: str):
+    with open("saved_tags.json", "r") as file:
+        content: dict[str, list[str]] = json.loads(file.read())
+    keys = list(content.keys())
+    
+    if category in keys:
+        return content[category]
+    return ""

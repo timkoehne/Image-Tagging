@@ -12,22 +12,6 @@ function loadPrevImage() {
 
 }
 
-function addTag() {
-    let data = {
-        tag: "test"
-    }
-
-    fetch("/add_tag/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-    }).then(response => {
-        console.log(response)
-    })
-}
-
 function setTags() {
     let value = document.querySelector('input[name="tags"]').value;
     if (value != "") {
@@ -53,14 +37,18 @@ function setTags() {
             "tags": tags
         }),
     }).then(response => {
-        console.log(response)
+        loadPopularTags()
     })
 }
 
-
 function loadTags() {
-
     filename = document.getElementById("filename").textContent;
+
+    const tagContainer = document.getElementById("tagContainer")
+    while (tagContainer.firstChild) {
+        tagContainer.removeChild(tagContainer.firstChild)
+    }
+
     tagify.loading(true).dropdown.hide()
 
     fetch("/get_tags/" + filename).then(response => {
@@ -68,22 +56,16 @@ function loadTags() {
     }).then(data => {
         let tags = data["tags"];
 
-        const tagContainer = document.getElementById("tagContainer")
-        while (tagContainer.firstChild) {
-            tagContainer.removeChild(tagContainer.firstChild)
-        }
         document.querySelector('input[name="tags"]').value = tags;
         tagify.loading(false) // render the suggestions dropdown
     })
     loadPossibleTags()
 }
 
-
 function loadPossibleTags() {
     fetch("/all_tags/").then(response => {
         return response.json();
     }).then(data => {
-        console.log(data)
         tagify.whitelist = data["tags"].split(",")
     })
 }
@@ -104,5 +86,85 @@ function loadImage() {
 
 }
 
+function loadTagCategories() {
+    fetch("/get_tag_categories/").then(response => {
+        return response.json()
+    }).then(categories_arr => {
+        for (i in categories_arr) {
+            option = document.createElement("option")
+            option.textContent = categories_arr[i]
+            option.value = categories_arr[i]
+            document.getElementById("tagCategories").appendChild(option)
+        }
+        onCategorySelection(categories_arr[0])
+
+    })
+}
+
+function onCategorySelection(selected_category) {
+    const tagsInCategory = document.getElementById("tagsInCategory")
+    while (tagsInCategory.firstChild) {
+        tagsInCategory.removeChild(tagsInCategory.firstChild)
+    }
+
+    fetch("/get_tag_category/" + selected_category).then(response => {
+        return response.json()
+    }).then(tagsInCategoryArr => {
+        for (i in tagsInCategoryArr) {
+            entry = document.createElement("button")
+            entry.onclick = function () {
+                addTagToTagInput(this.textContent)
+            }
+            entry.textContent = tagsInCategoryArr[i]
+            document.getElementById("tagsInCategory").appendChild(entry)
+        }
+    })
+
+}
+
+function addTagToTagInput(value) {
+
+    let currentTags = document.getElementById("tags").value
+    console.log(currentTags)
+    if (currentTags != "") {
+        currentTagsArr = JSON.parse(currentTags)
+    } else { currentTagsArr = [] }
+
+    let tags = []
+    for (i in currentTagsArr) {
+        tags.push(currentTagsArr[i]["value"])
+    }
+
+    tags.push(value)
+
+    const tagsStr = tags.join(",")
+    document.getElementById("tags").value = tagsStr
+}
+
+function loadPopularTags() {
+
+    const popularTags = document.getElementById("popularTags")
+    while (popularTags.firstChild) {
+        popularTags.removeChild(popularTags.firstChild)
+    }
+
+
+    fetch("/get_most_popular_tags/").then(response => {
+        return response.json()
+    }).then(popularTagsArr => {
+        // console.log("Loading popular Tags:")
+        // console.log(popularTagsArr)
+        for (i in popularTagsArr) {
+            entry = document.createElement("button")
+            entry.onclick = function () {
+                addTagToTagInput(this.textContent)
+            }
+            entry.textContent = popularTagsArr[i].tag
+            document.getElementById("popularTags").appendChild(entry)
+        }
+    })
+}
 
 loadImage()
+loadTagCategories()
+loadPopularTags()

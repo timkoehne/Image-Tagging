@@ -25,13 +25,26 @@
   </div>
 
   <div>
-    <input name='tags' class='some_class_name' placeholder='write some tags' value='css, html, javascript'>
+    <input id="tags" name='tags' class='some_class_name' placeholder='write some tags' value='css, html, javascript'>
     <button id="setTags" onclick="setTags()">setTags</button>
   </div>
 
+  <div class="tagSuggestions">
+    <div>
+      <label for="tagCategories">Tag Categories</label>
+      <select id="tagCategories" onchange="onCategorySelection(event.target.value)">
+      </select>
+      <div id="tagsInCategory" class="tagList">
+      </div>
+    </div>
 
+    <div>
+      <label for="popularTags">Most Popular Tags</label>
+      <div id="popularTags" class="tagList">
+      </div>
 
-
+    </div>
+  </div>
 
   <script src="{{ url_for('static', filename='initialize.js') }}"></script>
   <script src="{{ url_for('static', filename='tagSelector.js') }}"></script>
