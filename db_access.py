@@ -176,7 +176,7 @@ class DB_Controller:
         cursor = connection.cursor()
 
         cursor.execute(
-            "SELECT tag, COUNT(tag) AS amount FROM image_tags JOIN tags ON image_tags.tag_id=tags.tag_id GROUP BY tag ORDER BY amount DESC LIMIT 10"
+            "SELECT tag, COUNT(tag) AS amount FROM image_tags JOIN tags ON image_tags.tag_id=tags.tag_id GROUP BY tag ORDER BY amount DESC LIMIT 13"
         )
         popularity = cursor.fetchall()
         popularity = [{"tag": entry[0], "amount": entry[1]} for entry in popularity]

@@ -93,6 +93,13 @@ def get_tags_exif(filename: str):
 @app.route("/all_tags/")
 def all_tags():
     tags = db_controller.get_all_tags()
+    with open("saved_tags.json") as file:
+        categories = json.loads(file.read())
+        for category, entries in categories.items():
+            for entry in entries:
+                tags.append(entry)
+    
+    tags = set(tags)
     data = {"tags": ",".join(tags)}
     return json.dumps(data)
 
