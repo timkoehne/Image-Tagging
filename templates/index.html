@@ -7,6 +7,8 @@
   <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='tagSelector.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='toast.css') }}">
+
 </head>
 
 <body>
@@ -21,8 +23,9 @@
       <div>
         <button class="imageButton" id="butPrev" onclick="loadPrevImage()">Previous</button>
         <button class="imageButton" id="butNext" onclick="loadNextImage()">Next</button>
+        <button class="imageButton" id="butNextUntagged" onclick="loadFirstUntaggedImage()">Next Untagged Image</button>
       </div>
-      
+
       <button class="imageButton" id="setTags" onclick="setTags()">setTags</button>
 
       <div class="selectedTagsContainer">
@@ -50,6 +53,7 @@
   </div>
   </div>
   </div>
+  <script src="{{ url_for('static', filename='toast.js') }}"></script>
   <script src="{{ url_for('static', filename='initialize.js') }}"></script>
   <script src="{{ url_for('static', filename='tagSelector.js') }}"></script>
 </body>

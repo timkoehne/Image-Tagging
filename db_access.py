@@ -183,3 +183,14 @@ class DB_Controller:
 
         connection.close()
         return popularity
+
+    def image_has_tags(self, image: str) -> bool:
+        connection = sqlite3.connect(self.db_filename)
+        cursor = connection.cursor()
+        
+        tags = self.get_image_tags(image)
+        if len(tags) > 0:
+            return True
+        
+        connection.close()
+        return False

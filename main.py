@@ -16,6 +16,16 @@ images_path = "F:\\/images_without_background".split("/")  # this is ugly
 def hello():
     return render_template("index.html")
 
+@app.route("/get_first_untagged_image/")
+def get_first_untagged_image():
+    data = {}
+    images = os.listdir(os.path.join(*images_path))
+    for image_index, image in enumerate(images):
+        if not db_controller.image_has_tags(image):
+            data["value"] = image_index
+            break
+    return json.dumps(data)
+
 
 @app.route("/get_image/<int:image_id>")
 def get_image(image_id: int):

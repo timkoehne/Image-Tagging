@@ -1,5 +1,7 @@
 
 let currentImage = 0
+let setTagToast = new Toast("successfully saved tags")
+let noUntaggedImagesFoundToast = new Toast("no untagged images remaining")
 
 function loadNextImage() {
     currentImage += 1;
@@ -37,6 +39,7 @@ function setTags() {
             "tags": tags
         }),
     }).then(response => {
+        setTagToast.show()
         loadPopularTags()
     })
 }
@@ -161,6 +164,20 @@ function loadPopularTags() {
             }
             entry.textContent = popularTagsArr[i].tag
             document.getElementById("popularTags").appendChild(entry)
+        }
+    })
+}
+
+function loadFirstUntaggedImage() {
+    fetch("/get_first_untagged_image/").then(response => {
+        return response.json()
+    }).then(content => {
+        if (Object.values(content).length == 0) {
+            noUntaggedImagesFoundToast.show()
+        } else {
+            currentImage = parseInt(content["value"])
+            console.log("Loading image " + currentImage)
+            loadImage()
         }
     })
 }
