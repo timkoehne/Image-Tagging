@@ -1,0 +1,38 @@
+<html>
+
+<script>
+  function loadImages() {
+    let path = document.getElementById("imagesPath").value
+    console.log(path)
+
+    fetch("/set_image_path/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "images_path": path
+      }),
+    }).then(response => {
+      location.reload()
+    })
+  }
+
+</script>
+
+<head>
+  <title>Image Tagging</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="content">
+    <div class="column">
+      <label for="imagesPath">Enter file path for image files</label>
+      <input id="imagesPath" type="text">
+      <button onclick="loadImages()">Load Images</button>
+    </div>
+  </div>
+</body>
+
+</html>

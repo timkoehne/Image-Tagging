@@ -1,7 +1,7 @@
 import json
 import os
 from typing import Set, Tuple
-from flask import Flask, render_template, request, send_file
+from flask import Flask, redirect, render_template, request, send_file
 import exiftool
 import db_access
 
@@ -9,12 +9,34 @@ db_controller = db_access.DB_Controller("database.db")
 
 app = Flask(__name__)
 
-images_path = "F:\\/images_without_background".split("/")  # this is ugly
+images_path = []
 
 
 @app.route("/")
 def hello():
-    return render_template("index.html")
+    print(images_path)
+
+    if len(images_path) == 0 or len(os.listdir(os.path.join(*images_path))) == 0:
+        return render_template("select_image_path.html")
+    else:
+        return render_template("index.html")
+
+
+@app.route("/set_image_path/", methods=["POST"])
+def set_image_path():
+    if request.method == "POST":
+        if request.json and request.json["images_path"]:
+            image_path = request.json["images_path"]
+            print(image_path)
+            global images_path
+            if os.sep in image_path:
+                images_path = image_path.split(os.sep)
+            elif "/" in image_path:
+                images_path = image_path.split("/")
+            elif "\\" in image_path:
+                images_path = image_path.split("\\")
+    return redirect("/")
+
 
 @app.route("/get_first_untagged_image/")
 def get_first_untagged_image():
@@ -108,7 +130,7 @@ def all_tags():
         for category, entries in categories.items():
             for entry in entries:
                 tags.append(entry)
-    
+
     tags = set(tags)
     data = {"tags": ",".join(tags)}
     return json.dumps(data)
@@ -157,7 +179,7 @@ def get_tag_category(category: str):
     with open("saved_tags.json", "r") as file:
         content: dict[str, list[str]] = json.loads(file.read())
     keys = list(content.keys())
-    
+
     if category in keys:
         return content[category]
     return ""

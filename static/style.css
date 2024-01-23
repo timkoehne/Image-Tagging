@@ -42,9 +42,13 @@ img {
     min-height: 80px;
 }
 
-.rightSide {
+.inRow{
     display: flex;
     flex-direction: row;
+}
+
+.rightSide {
+    background-color: lightgray;
 }
 
 .tagListContainer {

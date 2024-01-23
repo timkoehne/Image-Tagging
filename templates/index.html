@@ -33,22 +33,28 @@
       </div>
     </div>
 
-    <div class="rightSide column">
-      <div class="tagListContainer">
-        <label for="popularTags">Most Popular Tags</label>
-        <div id="popularTags" class="tagList">
-          {# automatically placed popular tags here #}
+    <div class="rightSide">
+      <center><h1>Add Tags</h1></center>
+      <div class="inRow">
+        <div class="column">
+          <div class="tagListContainer">
+            <label for="popularTags">Most Popular Tags</label>
+            <div id="popularTags" class="tagList">
+              {# automatically placed popular tags here #}
+            </div>
+          </div>
+        </div>
+
+        <div class="tagListContainer">
+          <label for="tagCategories">Tag Categories</label>
+          <select id="tagCategories" onchange="onCategorySelection(event.target.value)">
+          </select>
+          <div id="tagsInCategory" class="tagList">
+            {# automatically placed category tags here #}
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="tagListContainer">
-      <label for="tagCategories">Tag Categories</label>
-      <select id="tagCategories" onchange="onCategorySelection(event.target.value)">
-      </select>
-      <div id="tagsInCategory" class="tagList">
-        {# automatically placed category tags here #}
-      </div>
     </div>
   </div>
   </div>
